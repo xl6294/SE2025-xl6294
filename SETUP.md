@@ -67,12 +67,13 @@ arduino-cli core update-index
 arduino-cli core install arduino:avr
 ```
 
-### 3. Install required libraries
+### 3. Install required libraries (locally)
+Run these **once** on your computer:
 ```bash
-arduino-cli lib install "DHT sensor library" "Adafruit Unified Sensor"
+arduino-cli lib install "LiquidCrystal"
+arduino-cli lib install "DHT sensor library"
+arduino-cli lib install "Adafruit Unified Sensor"
 ```
-
-(LiquidCrystal comes with the AVR core, no install needed.)
 
 ### 4. Verify board connection
 Plug in your Elegoo Uno R3, then run:
@@ -164,13 +165,32 @@ This repo uses **VS Code tasks** (`.vscode/tasks.json`) to automate compile, upl
 ---
 
 ## 🤖 Continuous Integration (CI) with GitHub Actions
-- GitHub Actions workflow: `.github/workflows/build.yml`.  
-- On every push/PR, it:
-  1. Installs Arduino CLI.  
-  2. Installs `arduino:avr` core and required libraries.  
-  3. Compiles **every `.ino` under `src/`**.  
 
-This ensures all assignments build successfully on GitHub servers.
+This repo includes a workflow: `.github/workflows/build.yml`.  
+It runs automatically on every **push** and **pull request**.
+
+### What it does
+1. Sets up Arduino CLI in a clean GitHub environment.  
+2. Installs the AVR core and required libraries.  
+3. Compiles every sketch in `src/`.  
+
+### Why libraries are installed every run
+- On **your local computer**: you install each library once, and Arduino CLI keeps them in `~/Arduino/libraries`.  
+- On **GitHub Actions**: every workflow run uses a fresh virtual machine. Nothing is cached.  
+  → That’s why `build.yml` must list **all libraries your sketches depend on**, so they are installed fresh each run.
+
+### Rule of thumb
+Whenever you add a new library to a sketch:
+1. Install it locally:  
+   ```bash
+   arduino-cli lib install "LibraryName"
+   ```
+2. Add it to `build.yml` under `arduino-cli lib install` so CI also knows about it.
+
+This ensures:
+- Local builds succeed.  
+- CI builds succeed.  
+- Anyone else cloning your repo can see which libraries are required.
 
 ---
 
@@ -198,14 +218,15 @@ This ensures all assignments build successfully on GitHub servers.
 3. Write your code.  
 4. Open the `.ino` in VS Code.  
 5. Press **Ctrl+Shift+B** to compile, then upload.  
-6. Commit + push to GitHub.
+6. Commit + push to GitHub.  
+7. If you used new libraries → install them locally and add them to `build.yml`.
 
 ---
 
 ## 🚦 Example: Week02 (DHT + LCD)
 - Folder: `src/week02_dht_lcd/`  
 - File: `week02_dht_lcd.ino`  
-- Libraries: `"DHT sensor library"`, `"Adafruit Unified Sensor"`, built-in LiquidCrystal.  
+- Libraries: `"LiquidCrystal"`, `"DHT sensor library"`, `"Adafruit Unified Sensor"`.  
 - Upload port (on macOS): `/dev/cu.usbmodem21101`.  
 
 ---
@@ -213,4 +234,4 @@ This ensures all assignments build successfully on GitHub servers.
 ✅ With this setup, you now have:
 - **Organized weekly assignments**
 - **One-click compile/upload in VS Code**
-- **Auto-build on GitHub**
+- **Auto-build on GitHub with library management**

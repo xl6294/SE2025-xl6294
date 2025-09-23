@@ -13,14 +13,15 @@ jobs:
       - name: Setup Arduino CLI
         uses: arduino/setup-arduino-cli@v1
 
-      - name: Install AVR core + required libs
+      - name: Install cores & libs
         run: |
-          arduino-cli config init
           arduino-cli core update-index
           arduino-cli core install arduino:avr
-          arduino-cli lib install "DHT sensor library" "Adafruit Unified Sensor"
+          arduino-cli lib install "LiquidCrystal"
+          arduino-cli lib install "DHT sensor library"
+          arduino-cli lib install "Adafruit Unified Sensor"
 
-      - name: Compile every .ino under src/
+      - name: Compile every sketch under src/
         shell: bash
         run: |
           set -e
