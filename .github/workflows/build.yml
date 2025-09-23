@@ -1,0 +1,31 @@
+name: Build all Uno sketches
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Arduino CLI
+        uses: arduino/setup-arduino-cli@v1
+
+      - name: Install AVR core + required libs
+        run: |
+          arduino-cli config init
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr
+          arduino-cli lib install "DHT sensor library" "Adafruit Unified Sensor"
+
+      - name: Compile every .ino under src/
+        shell: bash
+        run: |
+          set -e
+          mapfile -t sketches < <(find src -type f -name "*.ino" -printf "%h\n" | sort -u)
+          for d in "${sketches[@]}"; do
+            echo "==> Compiling $d"
+            arduino-cli compile --fqbn arduino:avr:uno "$d"
+          done

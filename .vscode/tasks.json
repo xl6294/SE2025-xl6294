@@ -1,0 +1,53 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Arduino: Compile (active sketch)",
+      "type": "shell",
+      "command": "arduino-cli",
+      "args": [
+        "compile",
+        "--fqbn", "arduino:avr:uno",
+        "${fileDirname}"
+      ],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Arduino: Upload (active sketch)",
+      "type": "shell",
+      "command": "arduino-cli",
+      "args": [
+        "upload",
+        "-p", "${input:serialPort}",
+        "--fqbn", "arduino:avr:uno",
+        "${fileDirname}"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Arduino: Monitor (9600)",
+      "type": "shell",
+      "command": "arduino-cli",
+      "args": [
+        "monitor",
+        "-p", "${input:serialPort}",
+        "-c", "baudrate=9600"
+      ],
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "serialPort",
+      "type": "pickString",
+      "description": "Select Uno serial port",
+      "options": [
+        "/dev/cu.usbmodem21101",   // macOS
+        "/dev/cu.usbserial-XXXX",  // macOS/CH340
+        "COM3", "COM4"             // Windows
+      ],
+      "default": "/dev/cu.usbmodem21101"
+    }
+  ]
+}

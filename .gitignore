@@ -1,0 +1,8 @@
+.vscode/*.db
+.vscode/*.browse.VC.db
+**/.pio/
+**/.build/
+*.hex
+*.elf
+*.bin
+.DS_Store
