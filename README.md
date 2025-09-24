@@ -1,6 +1,6 @@
 # Arduino Class Assignments (Uno R3)
 
-[![Build all Uno sketches](https://github.com/xl6294/SE2025-xl6294/actions/workflows/build.yml/badge.svg)](https://github.com/<your-username>/<your-repo>/actions/workflows/build.yml)
+[![Build all Uno sketches](https://github.com/<user>/<repo>/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/<user>/<repo>/actions/workflows/build.yml)
 
 Weekly assignments for my Arduino course, built and tested with:
 - **Arduino CLI**
