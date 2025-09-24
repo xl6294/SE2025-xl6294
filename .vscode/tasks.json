@@ -10,44 +10,53 @@
         "--fqbn", "arduino:avr:uno",
         "${fileDirname}"
       ],
+      "group": { "kind": "build", "isDefault": false },
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Arduino: Upload (auto-detect port)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "arduino-cli upload -p $(${workspaceFolder}/.venv/bin/python tools/find_arduino_port.py) --fqbn arduino:avr:uno ${fileDirname}"
+      ],
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Arduino: Monitor (auto-detect port, select baud)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "arduino-cli monitor -p $(${workspaceFolder}/.venv/bin/python tools/find_arduino_port.py) -c baudrate=${input:baudRate}"
+      ],
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Logger: Run (CSV to Downloads, select baud)",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": [
+        "tools/log_serial_logger.py",
+        "--baud", "${input:baudRate}",
+        "--sketch-name", "${fileBasename}"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
       "group": { "kind": "build", "isDefault": true },
-      "problemMatcher": []
-    },
-    {
-      "label": "Arduino: Upload (active sketch)",
-      "type": "shell",
-      "command": "arduino-cli",
-      "args": [
-        "upload",
-        "-p", "${input:serialPort}",
-        "--fqbn", "arduino:avr:uno",
-        "${fileDirname}"
-      ],
-      "problemMatcher": []
-    },
-    {
-      "label": "Arduino: Monitor (9600)",
-      "type": "shell",
-      "command": "arduino-cli",
-      "args": [
-        "monitor",
-        "-p", "${input:serialPort}",
-        "-c", "baudrate=9600"
-      ],
       "problemMatcher": []
     }
   ],
   "inputs": [
     {
-      "id": "serialPort",
+      "id": "baudRate",
       "type": "pickString",
-      "description": "Select Uno serial port",
-      "options": [
-        "/dev/cu.usbmodem21101",   // macOS
-        "/dev/cu.usbserial-XXXX",  // macOS/CH340
-        "COM3", "COM4"             // Windows
-      ],
-      "default": "/dev/cu.usbmodem21101"
+      "description": "Select baud rate",
+      "options": ["9600", "19200", "38400", "57600", "115200"],
+      "default": "115200"
     }
   ]
 }
