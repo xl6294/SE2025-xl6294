@@ -10,7 +10,7 @@ DHT dht(DHTPIN, DHTTYPE);
 LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
 
 // ----- Timing controls -----
-const unsigned long SAMPLE_MS = 2000;  // <--- Change this to set sensor read interval
+const unsigned long SAMPLE_MS = 60000;  // <--- Change this to set sensor read interval
 unsigned long lastSample = 0;
 
 // ----- CSV header string -----

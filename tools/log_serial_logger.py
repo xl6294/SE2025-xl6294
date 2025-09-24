@@ -32,7 +32,7 @@ DEFAULT_HEADER = ["t_s", "temperature_C", "humidity_pct"]  # fallback if not enc
     # 3600 (1 hr), 
     # 7200 (2 hr), 
     # 86400 (1 day)
-ROTATE_EVERY = 30  # <--- change here for new-file frequency
+ROTATE_EVERY = 10000  # <--- change here for new-file frequency
 
 # Optional throttle: write at most once every N seconds (0 = write every received line)
 THROTTLE_SECONDS = 0
